@@ -50,13 +50,24 @@ def get_cupcake(cupcake_id):
   cupcake = Cupcake.query.get_or_404(cupcake_id)
   return jsonify(cupcake=cupcake.serialize())
 
-@app.route("/api/cupcakes/<int:cupcake_id>")
+@app.route("/api/cupcakes/<int:cupcake_id>", methods=["PATCH"])
 def update_cupcake(cupcake_id):
   """Updates cupcake. 404 if not found. Returns JSON of updated cupcake."""
   cupcake = Cupcake.query.get_or_404(cupcake_id)
-  flavor, size, rating, image = get_request_data(request.json)
-  cupcake.flavor, cupcake.size, cupcake.rating, cupcake.image = flavor, size, rating, image
+  cupcake.flavor = request.json.get('flavor', cupcake.flavor)
+  cupcake.size = request.json.get('size', cupcake.size)
+  cupcake.rating = request.json.get('rating', cupcake.rating)
+  cupcake.image = request.json.get('image', cupcake.image)
+  db.session.commit()
   return jsonify(cupcake=cupcake.serialize())
+
+@app.route("/api/cupcakes/<int:cupcake_id>", methods=["DELETE"])
+def delete_cupcake(cupcake_id):
+  """Deletes cupcake. 404 if not found. Responds with {message:"Deleted."}"""
+  cupcake = Cupcake.query.get_or_404(cupcake_id)
+  db.session.delete(cupcake)
+  db.session.commit()
+  return jsonify(message="Deleted.")
 
 if os.environ.get("TESTING") is None:
   connect_db(app)

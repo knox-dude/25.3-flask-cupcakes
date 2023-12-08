@@ -33,6 +33,13 @@ CUPCAKE_DATA_2 = {
   "image": "http://test.com/cupcake2.jpg"
 }
 
+CUPCAKE_DATA_3 = {
+  "flavor": "TestPatch1",
+  "size": "TestPatchSize",
+  "rating": 1,
+  "image": ""
+}
+
 
 class CupcakeViewsTestCase(TestCase):
   """Tests for views of API."""
@@ -111,5 +118,34 @@ class CupcakeViewsTestCase(TestCase):
           "image": "http://test.com/cupcake2.jpg"
         }
       })
+  
+  def test_update_cupcake(self):
+    with app.test_client() as client:
+      url = f"/api/cupcakes/{self.cupcake_id}"
+      resp = client.patch(url, json=CUPCAKE_DATA_3)
 
-      self.assertEqual(Cupcake.query.count(), 2)
+      self.assertEqual(resp.status_code, 200)
+
+      data = resp.json
+
+      self.assertEqual(data, {
+        "cupcake": {
+          "id": self.cupcake_id,
+          "flavor": "TestPatch1",
+          "size": "TestPatchSize",
+          "rating": 1.0,
+          "image": ""
+        }
+      })
+
+  def test_delete_cupcake(self):
+    with app.test_client() as client:
+      url = f"/api/cupcakes/{self.cupcake_id}"
+      resp = client.delete(url)
+
+      self.assertEqual(resp.status_code, 200)
+      self.assertEqual(len(Cupcake.query.all()), 0)
+
+      data = resp.json
+
+      self.assertEqual(data, {"message":"Deleted."})
