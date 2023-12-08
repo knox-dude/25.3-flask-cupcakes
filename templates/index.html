@@ -9,17 +9,31 @@
   <ul class="cupcake-list">
   </ul>
   <form action="/api/cupcakes" method="post">
-    <label for="flavor">flavor:</label> 
-    <input type="text" name="flavor">
-    <label for="size">size:</label> 
-    <input type="text" name="size">
-    <label for="rating">rating:</label>
-    <input type="text" name="rating">
-    <label for="image">image:</label>
-    <input type="text" name="image"> 
+
+    <div>
+      <label for="flavor">flavor:</label> 
+      <input type="text" id="flavor">
+    </div>
+
+    <div>
+      <label for="size">size:</label> 
+      <input type="text" id="size">
+    </div>
+
+    <div>
+      <label for="rating">rating:</label>
+      <input type="text" id="rating">
+    </div>
+
+    <div>
+      <label for="image">image:</label>
+      <input type="text" id="image">
+    </div>
+    
     <button>Submit</button>
   </form>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/jquery"></script>
+  <script src="https://unpkg.com/axios/dist/axios.js"></script>
   <script src="static/cupcakes.js"></script>
 </body>
 </html>
